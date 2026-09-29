@@ -1,0 +1,389 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Who I Like...</title>
+
+<style>
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: black;
+    font-family: Arial, sans-serif;
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#intro {
+    background: radial-gradient(circle, #252525, #000);
+    color: white;
+}
+
+h1 {
+    font-size: clamp(45px, 9vw, 100px);
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 22px;
+    color: #aaa;
+}
+
+button {
+    margin-top: 30px;
+    padding: 20px 45px;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: white;
+    color: black;
+}
+
+button:hover {
+    transform: scale(1.08);
+}
+
+#decrypt,
+#error,
+#final,
+#black {
+    display: none;
+    color: white;
+    background: black;
+}
+
+#decrypt h2,
+#final h2 {
+    font-size: 45px;
+}
+
+#count {
+    font-size: 100px;
+    font-weight: bold;
+}
+
+#percent {
+    font-size: 80px;
+    font-family: monospace;
+}
+
+#bar {
+    width: 70%;
+    max-width: 600px;
+    height: 15px;
+    background: #222;
+    margin-top: 25px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#barInside {
+    width: 0%;
+    height: 100%;
+    background: white;
+}
+
+#video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+}
+
+#message {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,.85);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-size: 22px;
+    display: none;
+    z-index: 50;
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="screen">
+
+    <h1>WHO I LIKE...</h1>
+
+    <p>You've been asking long enough.</p>
+
+    <button id="revealButton">
+        REVEAL
+    </button>
+
+</div>
+
+
+<!-- DECRYPTING -->
+<div id="decrypt" class="screen">
+
+    <h2 id="status">
+        Initializing...
+    </h2>
+
+    <div id="count">5</div>
+
+</div>
+
+
+<!-- ERROR -->
+<div id="error" class="screen">
+
+    <h1>ERROR</h1>
+
+    <p>Decryption failed.</p>
+
+    <p>Attempting recovery...</p>
+
+</div>
+
+
+<!-- FINAL -->
+<div id="final" class="screen">
+
+    <h2>IDENTITY CONFIRMED</h2>
+
+    <div id="percent">
+        IDENTITY REDACTED
+    </div>
+
+    <p>Preparing final transmission...</p>
+
+</div>
+
+
+<!-- BLACK SCREEN -->
+<div id="black" class="screen"></div>
+
+
+<!-- VIDEO -->
+<iframe
+    id="video"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+</iframe>
+
+
+<!-- PRANK MESSAGE -->
+<div id="message">
+    YOU REALLY THOUGHT I WAS GOING TO TELL YOU? 💀
+</div>
+
+
+<script>
+
+const revealButton =
+    document.getElementById("revealButton");
+
+const intro =
+    document.getElementById("intro");
+
+const decrypt =
+    document.getElementById("decrypt");
+
+const status =
+    document.getElementById("status");
+
+const count =
+    document.getElementById("count");
+
+const error =
+    document.getElementById("error");
+
+const finalScreen =
+    document.getElementById("final");
+
+const black =
+    document.getElementById("black");
+
+const video =
+    document.getElementById("video");
+
+const message =
+    document.getElementById("message");
+
+
+/* ==============================
+   BUTTON
+============================== */
+
+revealButton.onclick = function() {
+
+    intro.style.display = "none";
+
+    decrypt.style.display = "flex";
+
+    startCountdown();
+
+};
+
+
+/* ==============================
+   COUNTDOWN
+============================== */
+
+function startCountdown() {
+
+    let number = 5;
+
+    const messages = [
+        "Initializing secure connection...",
+        "Connecting to classified database...",
+        "Authenticating...",
+        "Decrypting information...",
+        "Identity located..."
+    ];
+
+    function run() {
+
+        count.textContent = number;
+
+        status.textContent =
+            messages[5 - number];
+
+        if (number === 0) {
+
+            decrypt.style.display = "none";
+
+            startFakeDecryption();
+
+            return;
+        }
+
+        number--;
+
+        setTimeout(run, 1000);
+    }
+
+    run();
+}
+
+
+/* ==============================
+   FAKE DECRYPTION
+============================== */
+
+function startFakeDecryption() {
+
+    decrypt.style.display = "flex";
+
+    let percent = 0;
+
+    function progress() {
+
+        count.textContent =
+            percent + "%";
+
+        status.textContent =
+            "Decrypting identity...";
+
+        if (percent >= 99) {
+
+            decrypt.style.display = "none";
+
+            showError();
+
+            return;
+        }
+
+        percent++;
+
+        setTimeout(progress, 30);
+    }
+
+    progress();
+}
+
+
+/* ==============================
+   ERROR
+============================== */
+
+function showError() {
+
+    error.style.display = "flex";
+
+    setTimeout(function() {
+
+        error.style.display = "none";
+
+        finalScreen.style.display = "flex";
+
+        setTimeout(function() {
+
+            finalScreen.style.display = "none";
+
+            playRickroll();
+
+        }, 3000);
+
+    }, 1800);
+}
+
+
+/* ==============================
+   RICKROLL
+============================== */
+
+function playRickroll() {
+
+    black.style.display = "flex";
+
+    video.src =
+        "https://www.youtube.com/embed/dQw4w9WgXcQ" +
+        "?autoplay=1" +
+        "&mute=0" +
+        "&controls=0" +
+        "&rel=0" +
+        "&playsinline=1";
+
+    /*
+       Keep the thumbnail hidden
+       while YouTube loads.
+    */
+
+    setTimeout(function() {
+
+        black.style.display = "none";
+
+        video.style.display = "block";
+
+        setTimeout(function() {
+
+            message.style.display = "block";
+
+        }, 1500);
+
+    }, 1800);
+}
+
+</script>
+
+</body>
+</html>
+```
