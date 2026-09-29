@@ -13,124 +13,275 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: black;
-    font-family: Arial, sans-serif;
+    background: #000;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
+/* =========================
+   GENERAL SCREEN
+========================= */
 
 .screen {
     position: fixed;
     inset: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
     text-align: center;
 }
 
+
+/* =========================
+   INTRO
+========================= */
+
 #intro {
-    background: radial-gradient(circle, #252525, #000);
+    background:
+        radial-gradient(circle, #252525, #000);
+
     color: white;
+
+    z-index: 100;
 }
 
-h1 {
-    font-size: clamp(45px, 9vw, 100px);
+#intro h1 {
+    font-size: clamp(45px, 9vw, 110px);
     margin-bottom: 20px;
+    letter-spacing: 4px;
 }
 
-p {
-    font-size: 22px;
+#intro p {
     color: #aaa;
+    font-size: clamp(18px, 3vw, 27px);
+    margin-bottom: 35px;
 }
 
-button {
-    margin-top: 30px;
+#revealButton {
     padding: 20px 45px;
-    font-size: 24px;
-    font-weight: bold;
+
     border: none;
     border-radius: 12px;
-    cursor: pointer;
+
     background: white;
     color: black;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
 }
 
-button:hover {
+#revealButton:hover {
     transform: scale(1.08);
+
+    box-shadow:
+        0 0 30px rgba(255,255,255,.5);
 }
 
-#decrypt,
-#error,
-#final,
-#black {
+
+/* =========================
+   DECRYPTING
+========================= */
+
+#decrypt {
     display: none;
+
+    background: #030303;
     color: white;
-    background: black;
+
+    z-index: 90;
 }
 
-#decrypt h2,
-#final h2 {
-    font-size: 45px;
+#status {
+    font-family: monospace;
+
+    font-size: clamp(18px, 4vw, 32px);
+
+    min-height: 45px;
+
+    margin-bottom: 25px;
 }
 
 #count {
-    font-size: 100px;
+    font-family: monospace;
+
+    font-size: clamp(80px, 15vw, 170px);
+
     font-weight: bold;
 }
 
-#percent {
-    font-size: 80px;
+
+/* =========================
+   ERROR
+========================= */
+
+#error {
+    display: none;
+
+    background: #000;
+    color: white;
+
+    z-index: 85;
+}
+
+#error h1 {
     font-family: monospace;
+
+    font-size: clamp(50px, 10vw, 110px);
+
+    margin-bottom: 20px;
 }
 
-#bar {
-    width: 70%;
-    max-width: 600px;
-    height: 15px;
-    background: #222;
-    margin-top: 25px;
-    border-radius: 20px;
-    overflow: hidden;
+#error p {
+    color: #999;
+
+    font-family: monospace;
+
+    font-size: 20px;
 }
 
-#barInside {
-    width: 0%;
-    height: 100%;
-    background: white;
+
+/* =========================
+   FINAL REVEAL
+========================= */
+
+#final {
+    display: none;
+
+    background: #000;
+    color: white;
+
+    z-index: 80;
 }
+
+#final h2 {
+    font-size: clamp(25px, 5vw, 55px);
+
+    margin-bottom: 35px;
+}
+
+#identity {
+    font-family: monospace;
+
+    font-size: clamp(35px, 8vw, 100px);
+
+    font-weight: bold;
+
+    letter-spacing: 8px;
+
+    animation: identityAppear 1s ease;
+}
+
+#final p {
+    margin-top: 30px;
+
+    color: #777;
+
+    font-size: 18px;
+}
+
+@keyframes identityAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================
+   BLACK COVER
+========================= */
+
+#black {
+    display: none;
+
+    background: #000;
+
+    z-index: 200;
+}
+
+
+/* =========================
+   VIDEO
+========================= */
 
 #video {
     position: fixed;
+
     inset: 0;
-    width: 100%;
-    height: 100%;
+
+    width: 100vw;
+    height: 100vh;
+
     border: none;
+
     display: none;
+
+    z-index: 150;
 }
+
+
+/* =========================
+   PRANK MESSAGE
+========================= */
 
 #message {
     position: fixed;
-    bottom: 25px;
+
     left: 50%;
+    bottom: 30px;
+
     transform: translateX(-50%);
-    background: rgba(0,0,0,.85);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    font-size: 22px;
+
     display: none;
-    z-index: 50;
+
+    padding: 15px 25px;
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,.85);
+
+    color: white;
+
+    font-size: clamp(15px, 2.5vw, 25px);
+
+    text-align: center;
+
+    z-index: 250;
 }
+
 </style>
 </head>
 
+
 <body>
 
-<!-- INTRO -->
+
+<!-- =========================
+     INTRO
+========================= -->
+
 <div id="intro" class="screen">
 
     <h1>WHO I LIKE...</h1>
 
-    <p>You've been asking long enough.</p>
+    <p>
+        You've been asking long enough.
+    </p>
 
     <button id="revealButton">
         REVEAL
@@ -139,49 +290,76 @@ button:hover {
 </div>
 
 
-<!-- DECRYPTING -->
+<!-- =========================
+     DECRYPTING
+========================= -->
+
 <div id="decrypt" class="screen">
 
-    <h2 id="status">
-        Initializing...
-    </h2>
+    <div id="status">
+        Initializing secure connection...
+    </div>
 
-    <div id="count">5</div>
+    <div id="count">
+        5
+    </div>
 
 </div>
 
 
-<!-- ERROR -->
+<!-- =========================
+     ERROR
+========================= -->
+
 <div id="error" class="screen">
 
-    <h1>ERROR</h1>
+    <h1>
+        ERROR
+    </h1>
 
-    <p>Decryption failed.</p>
+    <p>
+        Decryption failed.
+    </p>
 
-    <p>Attempting recovery...</p>
+    <p>
+        Attempting recovery...
+    </p>
 
 </div>
 
 
-<!-- FINAL -->
+<!-- =========================
+     FINAL REVEAL
+========================= -->
+
 <div id="final" class="screen">
 
-    <h2>IDENTITY CONFIRMED</h2>
+    <h2>
+        IDENTITY CONFIRMED
+    </h2>
 
-    <div id="percent">
+    <div id="identity">
         IDENTITY REDACTED
     </div>
 
-    <p>Preparing final transmission...</p>
+    <p>
+        Preparing final transmission...
+    </p>
 
 </div>
 
 
-<!-- BLACK SCREEN -->
+<!-- =========================
+     BLACK COVER
+========================= -->
+
 <div id="black" class="screen"></div>
 
 
-<!-- VIDEO -->
+<!-- =========================
+     YOUTUBE VIDEO
+========================= -->
+
 <iframe
     id="video"
     allow="autoplay; fullscreen"
@@ -189,13 +367,20 @@ button:hover {
 </iframe>
 
 
-<!-- PRANK MESSAGE -->
+<!-- =========================
+     FINAL PRANK MESSAGE
+========================= -->
+
 <div id="message">
     YOU REALLY THOUGHT I WAS GOING TO TELL YOU? 💀
 </div>
 
 
 <script>
+
+/* =========================
+   ELEMENTS
+========================= */
 
 const revealButton =
     document.getElementById("revealButton");
@@ -228,9 +413,9 @@ const message =
     document.getElementById("message");
 
 
-/* ==============================
-   BUTTON
-============================== */
+/* =========================
+   REVEAL BUTTON
+========================= */
 
 revealButton.onclick = function() {
 
@@ -243,21 +428,28 @@ revealButton.onclick = function() {
 };
 
 
-/* ==============================
+/* =========================
    COUNTDOWN
-============================== */
+========================= */
 
 function startCountdown() {
 
     let number = 5;
 
     const messages = [
+
         "Initializing secure connection...",
+
         "Connecting to classified database...",
-        "Authenticating...",
+
+        "Authenticating requester...",
+
         "Decrypting information...",
+
         "Identity located..."
+
     ];
+
 
     function run() {
 
@@ -265,6 +457,7 @@ function startCountdown() {
 
         status.textContent =
             messages[5 - number];
+
 
         if (number === 0) {
 
@@ -275,24 +468,32 @@ function startCountdown() {
             return;
         }
 
+
         number--;
 
-        setTimeout(run, 1000);
+        setTimeout(
+            run,
+            1000
+        );
+
     }
 
+
     run();
+
 }
 
 
-/* ==============================
+/* =========================
    FAKE DECRYPTION
-============================== */
+========================= */
 
 function startFakeDecryption() {
 
     decrypt.style.display = "flex";
 
     let percent = 0;
+
 
     function progress() {
 
@@ -301,6 +502,7 @@ function startFakeDecryption() {
 
         status.textContent =
             "Decrypting identity...";
+
 
         if (percent >= 99) {
 
@@ -311,22 +513,39 @@ function startFakeDecryption() {
             return;
         }
 
+
         percent++;
 
-        setTimeout(progress, 30);
+
+        let delay = 30;
+
+
+        if (percent > 85) {
+            delay = 90;
+        }
+
+
+        setTimeout(
+            progress,
+            delay
+        );
+
     }
 
+
     progress();
+
 }
 
 
-/* ==============================
-   ERROR
-============================== */
+/* =========================
+   FAKE ERROR
+========================= */
 
 function showError() {
 
     error.style.display = "flex";
+
 
     setTimeout(function() {
 
@@ -334,37 +553,51 @@ function showError() {
 
         finalScreen.style.display = "flex";
 
+
         setTimeout(function() {
 
             finalScreen.style.display = "none";
 
-            playRickroll();
+            playVideo();
 
         }, 3000);
 
+
     }, 1800);
+
 }
 
 
-/* ==============================
-   RICKROLL
-============================== */
+/* =========================
+   PLAY VIDEO
+========================= */
 
-function playRickroll() {
+function playVideo() {
+
+    /*
+       Keep the screen black while
+       YouTube loads.
+    */
 
     black.style.display = "flex";
 
+
+    /*
+       Your selected YouTube video.
+    */
+
     video.src =
-        "https://www.youtube.com/embed/dQw4w9WgXcQ" +
+        "https://www.youtube.com/embed/QDia3e12czc" +
         "?autoplay=1" +
         "&mute=0" +
         "&controls=0" +
         "&rel=0" +
         "&playsinline=1";
 
+
     /*
-       Keep the thumbnail hidden
-       while YouTube loads.
+       Wait for the video to load
+       before revealing it.
     */
 
     setTimeout(function() {
@@ -373,13 +606,21 @@ function playRickroll() {
 
         video.style.display = "block";
 
+
+        /*
+           Show the prank message
+           after the video starts.
+        */
+
         setTimeout(function() {
 
             message.style.display = "block";
 
         }, 1500);
 
+
     }, 1800);
+
 }
 
 </script>
